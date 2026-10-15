@@ -1,10 +1,9 @@
 # Dependabot version updates for every package ecosystem in this repository.
 # Reference: https://docs.github.com/code-security/reference/supply-chain-security/dependabot-options-reference
 #
-# Minor and patch updates are grouped into one PR per ecosystem to keep noise
-# down; major updates still arrive as individual PRs so they can be reviewed
-# on their own. Packages that must move in lockstep (pyo3-*, torch*, svelte)
-# are grouped together regardless of update type.
+# All updates (major, minor and patch) are grouped into one PR per ecosystem to
+# keep noise down. Packages that must move in lockstep (pyo3-*, torch*, svelte)
+# get their own group so they are always bumped together.
 version: 2
 
 updates:
@@ -39,12 +38,9 @@ updates:
       pyo3:
         patterns:
           - "pyo3*"
-      rust-minor-patch:
+      rust:
         patterns:
           - "*"
-        update-types:
-          - minor
-          - patch
     ignore:
       # The zenoh crates are pinned to =1.9.0 and swapped for a fork
       # (evanev7/zenoh, branch "exo") via [patch.crates-io]. Bumping the
@@ -76,12 +72,9 @@ updates:
       mlx:
         patterns:
           - "mlx*"
-      python-minor-patch:
+      python:
         patterns:
           - "*"
-        update-types:
-          - minor
-          - patch
 
   # JavaScript: SvelteKit dashboard.
   - package-ecosystem: npm
@@ -98,12 +91,9 @@ updates:
           - "svelte"
           - "svelte-check"
           - "@sveltejs/*"
-      npm-minor-patch:
+      npm:
         patterns:
           - "*"
-        update-types:
-          - minor
-          - patch
 
   # Swift: the macOS app's SwiftPM dependencies (Sparkle) are managed by Xcode in
   # app/EXO/EXO.xcodeproj (project.pbxproj + xcshareddata/swiftpm/Package.resolved).
