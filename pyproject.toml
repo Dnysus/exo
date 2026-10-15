@@ -54,8 +54,8 @@ mlx = [
   "mflux==0.17.5",
   "torch==2.10.0; sys_platform == 'darwin'",
   "torch==2.10.0; sys_platform == 'linux'",
-  "torchaudio==2.10.0; sys_platform == 'darwin'",
-  "torchaudio==2.10.0; sys_platform == 'linux'",
+  "torchaudio==2.11.0; sys_platform == 'darwin'",
+  "torchaudio==2.11.0; sys_platform == 'linux'",
   "torchvision==0.25.0; sys_platform == 'darwin'",
   "torchvision==0.25.0; sys_platform == 'linux'",
 ]
