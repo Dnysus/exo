@@ -1,0 +1,133 @@
+# Dependabot version updates for every package ecosystem in this repository.
+# Reference: https://docs.github.com/code-security/reference/supply-chain-security/dependabot-options-reference
+#
+# Minor and patch updates are grouped into one PR per ecosystem to keep noise
+# down; major updates still arrive as individual PRs so they can be reviewed
+# on their own. Packages that must move in lockstep (pyo3-*, torch*, svelte)
+# are grouped together regardless of update type.
+version: 2
+
+updates:
+  # GitHub Actions: workflows in .github/workflows plus every composite action
+  # under .github/actions/* (their action.yml files have their own `uses:` steps,
+  # which the root "/" entry alone does not scan).
+  - package-ecosystem: github-actions
+    directories:
+      - "/"
+      - "/.github/actions/*"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Rust: Cargo workspace rooted at /Cargo.toml (members: rust/exo_rs, rust/networking).
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      pyo3:
+        patterns:
+          - "pyo3*"
+      rust-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # The zenoh crates are pinned to =1.9.0 and swapped for a fork
+      # (evanev7/zenoh, branch "exo") via [patch.crates-io]. Bumping the
+      # version requirement would make Cargo skip the patch and build against
+      # upstream instead, so leave these to be updated by hand.
+      - dependency-name: "zenoh*"
+
+  # Python: uv workspace rooted at /pyproject.toml + /uv.lock
+  # (members: rust/exo_rs, bench, tools). The whole workspace resolves from the
+  # root lockfile. Packages sourced from git or a direct URL (mlx on macOS,
+  # mlx-lm, mflux, mlx-cuda-*) are not on an index and are skipped by Dependabot.
+  - package-ecosystem: uv
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    # Most requirements are ">=" lower bounds: only refresh uv.lock for those
+    # and rewrite the manifest just for exact "==" pins (anyio, torch, ...).
+    versioning-strategy: increase-if-necessary
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      pytorch:
+        patterns:
+          - "torch"
+          - "torchvision"
+          - "torchaudio"
+      mlx:
+        patterns:
+          - "mlx*"
+      python-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # JavaScript: SvelteKit dashboard.
+  - package-ecosystem: npm
+    directory: "/dashboard"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      svelte:
+        patterns:
+          - "svelte"
+          - "svelte-check"
+          - "@sveltejs/*"
+      npm-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # Swift: the macOS app's SwiftPM dependencies (Sparkle) are managed by Xcode in
+  # app/EXO/EXO.xcodeproj (project.pbxproj + xcshareddata/swiftpm/Package.resolved).
+  - package-ecosystem: swift
+    directory: "/app/EXO"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+      include: scope
+
+  # Nix: flake inputs pinned in /flake.lock. Dependabot advances the locked
+  # revisions; refs written in flake.nix itself (e.g. nixpkgs "nixos-25.11")
+  # are left as-is.
+  - package-ecosystem: nix
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      flake-inputs:
+        patterns:
+          - "*"
